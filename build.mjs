@@ -1,0 +1,14 @@
+import { build } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { mdsvex } from 'mdsvex';
+import fs from 'node:fs';
+import path from 'node:path';
+import { render } from 'svelte/server';
+const root=path.dirname(new URL(import.meta.url).pathname);
+process.chdir(root);
+await build({root,configFile:false,resolve:{alias:{'#lib':path.join(root,'src/lib')},conditions:['svelte','node']},plugins:[svelte({extensions:['.svelte','.svx'],preprocess:mdsvex({extensions:['.svx'],layout:{runbook:path.join(root,'src/lib/layouts/runbook.svelte')}})})],build:{ssrEmitAssets:true,ssr:'src/routes/kb/decisions/0002-dedupe-by-cause/+page.svx',outDir:'.render',rollupOptions:{output:{entryFileNames:'page.mjs'}}}});
+const {default:Page}=await import('./.render/page.mjs');
+const result=render(Page);
+fs.mkdirSync('rendered',{recursive:true});
+const css=fs.existsSync('.render/assets')?fs.readdirSync('.render/assets').filter(f=>f.endsWith('.css')).map(f=>fs.readFileSync('.render/assets/'+f,'utf8')).join('\n'):'';
+fs.writeFileSync('rendered/0002-dedupe-by-cause.html',`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${result.head}<style>${css}</style></head><body>${result.body}</body></html>`);

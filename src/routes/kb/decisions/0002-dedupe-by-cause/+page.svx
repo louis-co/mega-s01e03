@@ -1,0 +1,80 @@
+---
+layout: runbook
+title: '0002 · Split #4471 and merge by cause'
+owner: Louis Hollinger and Codex
+status: proposed
+reviewed: '2026-11-02'
+signature: 'Louis Hollinger / Codex / S01E03 / 2026-11-02'
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+## Decision
+
+Supersedes decision 0001 when accepted. The accepted record is preserved unchanged.
+Merge reports only when their verified cause matches. Subject text and browser intake tags
+are clues, not proof. Unknown tenants or unexplained symptoms require investigation, not automatic merging.
+
+## What #4471 contains
+
+The incident prose says one issue and one fix. The executable classification distinguishes
+two causes, using the tenant's locale, booking form and report channel. Deduplicate overlapping
+export pages by report ID before counting; classify with causes.ts and the tenant directory.
+
+<CauseTable ticket={4471} />
+
+### Shared parser
+
+The shared parser reads month first for tenants who write day first. App and email reports,
+and applicable older-form reports, belong here. Correct parsing to follow the tenant's format
+and test ambiguous dates in both directions, plus dates with a day above twelve.
+
+### Booking-v3 hint
+
+The form advertises MM/DD/YYYY while interpreting input in the tenant's day-first order.
+Correct the hint and parsing contract together. Test the visible format and submitted date
+for every supported tenant locale; fixing the shared parser alone does not fix this path.
+These reports need their own issue instead of remaining hidden under #4471.
+
+## Read the queue by arrival and by merge
+
+<QueueTimeline ticket={4471} />
+
+Reports start in April; their later bulk merge is a desk action, not the start of the fault.
+Compare receivedAt with mergedAt before treating a merge spike as a new incident.
+The export ends on 4 October 2026. Counts are a snapshot, not a claim about today's queue.
+The desk must re-run classification against new reports as it continues working.
+
+## Evidence that needs a separate investigation
+
+The desk notes flag R-41202, R-41209, R-41236, R-41344 and R-41620. They remain counted
+under their tenant-derived parser classification. Their bodies describe one-day differences,
+time-zone-dependent output or an invite arriving before booking. The classifier does not
+prove these symptoms have the parser's root cause. Preserve them for investigation; do not
+invent a confirmed third cause or silently remove them from the totals.
+
+## Replacement triage rule
+
+<DedupeExplorer />
+
+Match verified cause, not subject. The explorer demonstrates that identical subjects can
+have different causes and different subjects can share one. For an unknown tenant, resolve
+the tenant and reproduce the failure before merging. Keep a report-to-cause audit trail.
+
+The triage page and decision 0001 were reviewed in June 2024. Their stale warning is material:
+recently reviewed incident prose can also contradict the current executable evidence.
+Review both prose and rendered components before relying on either.
+
+## Validation and follow-up
+
+File a separate GitHub issue for each confirmed cause with its unique report count and example
+IDs. Preserve the original export and accepted decision. Confirm fixes independently, then
+reconcile new arrivals and investigate the flagged symptoms before closing the parent ticket.
+This page proposes operational changes; it does not claim either product bug has been fixed.
+
+<RenderStamp {signature} />
