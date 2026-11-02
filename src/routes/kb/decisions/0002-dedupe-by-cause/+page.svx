@@ -70,11 +70,20 @@ The triage page and decision 0001 were reviewed in June 2024. Their stale warnin
 recently reviewed incident prose can also contradict the current executable evidence.
 Review both prose and rendered components before relying on either.
 
+## Engineering outcome — 5 October 2026
+
+The [course desk update](https://hq.mega.dev/challenges/what-it-shows) now reports #4471 closed.
+[Parser issue #1](https://github.com/louis-co/mega-s01e03/issues/1): fixed,
+`fix(dates): parse dd/mm for eu locales`; close as completed.
+[Hint issue #2](https://github.com/louis-co/mega-s01e03/issues/2): won't fix,
+booking-v3 form retired; close as not planned. Retirement is not a hint implementation fix.
+These are engineering-reported outcomes, not product changes made by this KB project.
+
 ## Validation and follow-up
 
 File a separate GitHub issue for each confirmed cause with its unique report count and example
 IDs. Preserve the original export and accepted decision. Confirm fixes independently, then
 reconcile new arrivals and investigate the flagged symptoms before closing the parent ticket.
-This page proposes operational changes; it does not claim either product bug has been fixed.
+The triage policy remains proposed; the engineering-reported issue outcomes above are separate from policy acceptance.
 
 <RenderStamp {signature} />
