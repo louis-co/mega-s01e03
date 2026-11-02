@@ -4,7 +4,7 @@ title: '0002 · Split #4471 and merge by cause'
 owner: Louis Hollinger and Codex
 status: proposed
 reviewed: '2026-11-02'
-signature: 'Louis Hollinger / Codex / S01E03 / 2026-11-02'
+signature: 'v1.eyJzdWIiOiI1MDkxIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTM2MzMxODIsImV4cCI6MTc5MzcxOTU4Mn0.jMMX-cSwtMjyeI5or7rgmviVO4Wek-pXtpAVpYsgfIY'
 ---
 
 <script>
